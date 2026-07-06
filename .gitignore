@@ -1,0 +1,9 @@
+bin/
+obj/
+*.user
+*.suo
+*.pdb
+*.log
+*.cache
+publish/
+PS5MemoryPeeker-publish/

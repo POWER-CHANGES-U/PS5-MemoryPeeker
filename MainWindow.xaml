@@ -1,0 +1,592 @@
+<Window x:Class="PS5MemoryPeeker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PS5MemoryPeeker"
+        Title="PS5-MemoryPeeker"
+        Icon="Assets/ps5-playstation-binary-v3.ico"
+        Height="820"
+        Width="1660"
+        MinHeight="720"
+        MinWidth="1360"
+        Background="#F5F6F7"
+        FontFamily="{StaticResource AppFont}"
+        FontSize="13"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        ResizeMode="CanResize">
+    <Window.Resources>
+        <SolidColorBrush x:Key="InkBrush" Color="#151A1E" />
+        <SolidColorBrush x:Key="MutedBrush" Color="#68737D" />
+        <SolidColorBrush x:Key="LineBrush" Color="#DDE2E7" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#1677FF" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="#128A4C" />
+        <SolidColorBrush x:Key="DangerBrush" Color="#C2413D" />
+        <SolidColorBrush x:Key="ButtonHoverBrush" Color="#F2F6FA" />
+        <SolidColorBrush x:Key="ButtonPressedBrush" Color="#E8EEF5" />
+        <SolidColorBrush x:Key="PrimaryButtonHoverBrush" Color="#075FD8" />
+        <SolidColorBrush x:Key="PrimaryButtonPressedBrush" Color="#064FB4" />
+
+        <Style TargetType="Button">
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#CBD3DC" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ButtonHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ButtonPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource PrimaryButtonHoverBrush}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource PrimaryButtonHoverBrush}" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource PrimaryButtonPressedBrush}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource PrimaryButtonPressedBrush}" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="BorderBrush" Value="#CBD3DC" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="Padding" Value="7,5" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="BorderBrush" Value="#CBD3DC" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Border Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                BorderThickness="1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="28" />
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="1"
+                                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <ContentPresenter x:Name="ContentSite"
+                                              IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+
+                            <TextBox x:Name="PART_EditableTextBox"
+                                     Visibility="Hidden"
+                                     Background="{TemplateBinding Background}"
+                                     Foreground="{TemplateBinding Foreground}"
+                                     BorderThickness="0"
+                                     Margin="{TemplateBinding Padding}"
+                                     VerticalContentAlignment="Center"
+                                     Focusable="True"
+                                     IsReadOnly="{TemplateBinding IsReadOnly}" />
+
+                            <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   PopupAnimation="Fade">
+                                <Grid MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1">
+                                        <ScrollViewer CanContentScroll="True">
+                                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEF1F4" />
+            <Setter Property="RowHeight" Value="30" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="SelectionMode" Value="Extended" />
+            <Setter Property="SelectionUnit" Value="FullRow" />
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0" />
+            <RowDefinition Height="108" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="238" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Border x:Name="HeaderBorder"
+                Grid.Row="0"
+                Background="#FFFFFF"
+                BorderBrush="{StaticResource LineBrush}"
+                BorderThickness="0,0,0,1"
+                Visibility="Collapsed" />
+
+        <Border x:Name="ToolbarBorder" Grid.Row="1" Background="#FFFFFF" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1">
+            <Grid Margin="18,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18" />
+                    <RowDefinition Height="34" />
+                    <RowDefinition Height="34" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="58" />
+                    <ColumnDefinition Width="126" />
+                    <ColumnDefinition Width="104" />
+                    <ColumnDefinition Width="34" />
+                    <ColumnDefinition Width="132" />
+                    <ColumnDefinition Width="1.2*" />
+                    <ColumnDefinition Width="112" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="118" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="1.4*" />
+                    <ColumnDefinition Width="126" />
+                    <ColumnDefinition Width="126" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="PS5-IP:" Foreground="{StaticResource MutedBrush}" VerticalAlignment="Center" />
+                <TextBlock x:Name="ConnectionDiagnosticsText"
+                           Grid.Row="0"
+                           Grid.Column="8"
+                           Grid.ColumnSpan="5"
+                           Text="Payload: idle | Debug: idle"
+                           Foreground="{StaticResource MutedBrush}"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           TextTrimming="CharacterEllipsis"
+                           Visibility="Collapsed" />
+                <TextBox x:Name="IpBox" Text="" Grid.Row="1" Grid.Column="1" TabIndex="0" Margin="0,0,10,0" ToolTip="PS5 IP address" />
+                <Button x:Name="ConnectButton" Content="Connect" Grid.Row="1" Grid.Column="2" Style="{StaticResource PrimaryButton}" Margin="0,0,4,0" Click="Connect_Click" />
+                <Button x:Name="HistoryButton" Grid.Row="1" Grid.Column="3" Padding="0" Margin="0,0,8,0" ToolTip="Connection history" Click="HistoryButton_Click">
+                    <Grid Width="18" Height="18">
+                        <Path Data="M 3 6 L 9 12 L 15 6 Z"
+                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
+                    </Grid>
+                </Button>
+                <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,8,0">
+                    <TextBlock x:Name="ConnectionStatusLabel"
+                               Text="Status:"
+                               Foreground="{StaticResource InkBrush}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,4,0" />
+                    <TextBlock x:Name="ConnectionBadge"
+                               Text="Idle"
+                               Foreground="{StaticResource MutedBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <TextBox x:Name="ProcessDisplayBox"
+                          Grid.Row="1"
+                          Grid.Column="5"
+                          Text="EBOOT - WAITING ❌"
+                          IsReadOnly="True"
+                          Margin="0,0,8,0" />
+                <Button x:Name="RefreshMemoryButton" Content="Refresh" Grid.Row="1" Grid.Column="6" Margin="0,0,8,0" Click="RefreshMemory_Click" />
+                <TextBox x:Name="ValueBox" Grid.Row="1" Grid.Column="8" Text="0" Margin="0,0,8,0" />
+                <ComboBox x:Name="ValueTypeBox" Grid.Row="1" Grid.Column="9" ItemsSource="{Binding Source={x:Static local:MemoryValueCodec.ValueTypes}}" SelectedIndex="2" Margin="0,0,8,0" />
+                <ComboBox x:Name="CompareTypeBox" Grid.Row="1" Grid.Column="10" ItemsSource="{Binding Source={x:Static local:MemoryValueCodec.FirstScanTypes}}" SelectedIndex="0" Margin="0,0,8,0" SelectionChanged="CompareTypeBox_SelectionChanged" />
+                <Button x:Name="FirstScanButton" Content="First Scan" Grid.Row="1" Grid.Column="11" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="FirstScan_Click" />
+                <Button x:Name="NextScanButton" Content="Next Scan" Grid.Row="1" Grid.Column="12" Style="{StaticResource PrimaryButton}" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="NextScan_Click" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Port:" Foreground="{StaticResource MutedBrush}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                <TextBox x:Name="PortBox" Grid.Row="2" Grid.Column="1" Text="" TabIndex="1" Margin="0,0,10,0" ToolTip="Port" />
+                <StackPanel Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <CheckBox x:Name="AlignmentBox" Content="Alignment" IsChecked="True" Margin="0,0,14,0" />
+                    <CheckBox x:Name="AutoPauseBox" Content="Auto pause" Margin="0,0,14,0" />
+                </StackPanel>
+                <Button x:Name="ThemeToggleButton"
+                        Grid.Row="2"
+                        Grid.Column="9"
+                        Content="THEME"
+                        FontSize="13"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,8,0"
+                        ToolTip="Theme"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Click="ThemeToggle_Click" />
+                <Popup x:Name="ThemePopup"
+                       PlacementTarget="{Binding ElementName=ThemeToggleButton}"
+                       Placement="Bottom"
+                       AllowsTransparency="True"
+                       StaysOpen="False">
+                    <Border x:Name="ThemePopupBorder"
+                            Width="{Binding ActualWidth, ElementName=ThemeToggleButton}"
+                            Padding="4"
+                            Background="#FFFFFF"
+                            BorderBrush="{StaticResource LineBrush}"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <Button x:Name="ThemeLightButton"
+                                    Content="Light"
+                                    Height="34"
+                                    MinHeight="34"
+                                    Padding="0"
+                                    Margin="0,0,0,4"
+                                    HorizontalAlignment="Stretch"
+                                    Click="ThemeLight_Click" />
+                            <Button x:Name="ThemeDarkButton"
+                                    Content="Dark"
+                                    Height="34"
+                                    MinHeight="34"
+                                    Padding="0"
+                                    HorizontalAlignment="Stretch"
+                                    Click="ThemeDark_Click" />
+                        </StackPanel>
+                    </Border>
+                </Popup>
+                <TextBox x:Name="SecondValueBox" Grid.Row="2" Grid.Column="8" Text="0" Margin="0,0,8,0" Visibility="Collapsed" />
+                <ProgressBar x:Name="ScanProgress" Grid.Row="2" Grid.Column="10" Grid.ColumnSpan="2" Height="24" Minimum="0" Maximum="100" Margin="0,5,8,5" />
+                <TextBlock x:Name="ProgressText" Grid.Row="2" Grid.Column="12" Text="0%" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="14,12,14,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="360" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="ResultsGrid"
+                      Grid.Column="0"
+                      ItemsSource="{Binding Results}"
+                      MouseDoubleClick="ResultsGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Address" Binding="{Binding AddressText}" Width="155" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding TypeText}" Width="95" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="145" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Hex" Binding="{Binding Hex}" Width="165" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Section" Binding="{Binding Section}" Width="*" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Border x:Name="MemoryPanel" Grid.Column="1" Background="#FFFFFF" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" Margin="12,0,0,0">
+                <Grid Margin="14">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Process Memory" Foreground="{StaticResource InkBrush}" Margin="0,0,0,10" />
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+                        <CheckBox x:Name="SelectAllBox" Content="Select All" IsChecked="False" Click="SelectAllBox_Click" Margin="0,0,12,0" />
+                        <CheckBox x:Name="FilterBox" Content="Filter" IsChecked="True" Margin="0,0,12,0" />
+                    </StackPanel>
+                    <TextBox x:Name="FilterTextBox" Grid.Row="2" Text="anon, exe, Game, dlmalloc, Sce" Margin="0,0,0,10" />
+                    <ListBox x:Name="SectionsList"
+                             Grid.Row="3"
+                             ItemsSource="{Binding Sections}"
+                             BorderBrush="{StaticResource LineBrush}"
+                             BorderThickness="1"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected}"
+                                          Content="{Binding DisplayName}"
+                                          Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                          Background="Transparent"
+                                          Click="SectionCheckBox_Click"
+                                          Margin="4,3" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Row="4" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Selected:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBox x:Name="SelectedBox" Grid.Column="1" IsReadOnly="True" Margin="0,0,10,0" />
+                        <TextBlock Grid.Column="2" Text="Total:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBox x:Name="TotalBox" Grid.Column="3" IsReadOnly="True" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="14,12,14,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="New" Width="92" Margin="0,0,8,0" Click="NewCheat_Click" />
+                <Button Content="Refresh" Width="92" Margin="0,0,8,0" Click="RefreshCheats_Click" />
+                <Button Content="Save" Width="92" Margin="0,0,8,0" Click="SaveCheats_Click" />
+                <Button Content="Load" Width="92" Margin="0,0,18,0" Click="LoadCheats_Click" />
+                <Button Content="Pause" Width="92" Margin="0,0,8,0" Click="Pause_Click" />
+                <Button Content="Resume" Width="92" Margin="0,0,8,0" Click="Resume_Click" />
+                <Button Content="Kill" Width="92" Margin="0,0,8,0" Foreground="{StaticResource DangerBrush}" BorderBrush="{StaticResource DangerBrush}" Click="Kill_Click" />
+                <Button Content="Export" Width="112" Style="{StaticResource PrimaryButton}" Click="ExportCheats_Click" />
+            </StackPanel>
+
+            <DataGrid x:Name="CheatsGrid"
+                      Grid.Row="1"
+                      ItemsSource="{Binding Cheats}"
+                      CurrentCellChanged="CheatsGrid_CurrentCellChanged">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="On" Binding="{Binding IsActive}" Width="46" />
+                    <DataGridTextColumn Header="Address" Binding="{Binding AddressText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Width="150" />
+                    <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding TypeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={x:Static local:MemoryValueCodec.ValueTypes}}" Width="105" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Width="150" />
+                    <DataGridTextColumn Header="Section" Binding="{Binding Section}" Width="150" />
+                    <DataGridCheckBoxColumn Header="Lock" Binding="{Binding IsLocked}" Width="64" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Border x:Name="StatusBorder" Grid.Row="4" Background="#FFFFFF" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0">
+            <Grid Margin="14,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="220" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusText" Text="Idle." VerticalAlignment="Center" Foreground="{StaticResource InkBrush}" />
+                <TextBlock x:Name="ScanTimeText" Grid.Column="1" Text="-" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource MutedBrush}" />
+            </Grid>
+        </Border>
+
+        <Grid x:Name="StartupFoldOverlay"
+              Grid.RowSpan="5"
+              Background="Transparent"
+              Panel.ZIndex="999"
+              Focusable="True"
+              IsHitTestVisible="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="FoldTopLeft"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    BorderBrush="#DDE2E7"
+                    BorderThickness="0,0,1,1"
+                    Opacity="0.98"
+                    RenderTransformOrigin="1,1">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FBFCFE" Offset="0" />
+                        <GradientStop Color="#EEF3F8" Offset="0.48" />
+                        <GradientStop Color="#FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                        <SkewTransform AngleX="0" AngleY="0" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <Canvas Opacity="0.42" IsHitTestVisible="False">
+                    <Path Stroke="#C8D2DC" StrokeThickness="1" Data="M 36 24 C 120 86, 210 48, 340 142" />
+                    <Path Stroke="#E7ECF1" StrokeThickness="2" Data="M 18 170 C 140 125, 235 238, 420 190" />
+                    <Path Stroke="#BFC9D4" StrokeThickness="1" Data="M 84 310 C 150 258, 285 292, 390 248" />
+                    <Path Stroke="#FFFFFF" StrokeThickness="2" Data="M 250 12 C 230 95, 310 176, 286 260" />
+                    <Path Stroke="#D8E0E8" StrokeThickness="1" Data="M 14 42 L 168 210 L 92 420" />
+                </Canvas>
+            </Border>
+            <Border x:Name="FoldTopRight"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    BorderBrush="#DDE2E7"
+                    BorderThickness="1,0,0,1"
+                    Opacity="0.98"
+                    RenderTransformOrigin="0,1">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
+                        <GradientStop Color="#FFFFFF" Offset="0" />
+                        <GradientStop Color="#EEF3F8" Offset="0.52" />
+                        <GradientStop Color="#F9FBFD" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                        <SkewTransform AngleX="0" AngleY="0" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <Canvas Opacity="0.42" IsHitTestVisible="False">
+                    <Path Stroke="#C8D2DC" StrokeThickness="1" Data="M 24 35 C 150 72, 255 30, 430 120" />
+                    <Path Stroke="#FFFFFF" StrokeThickness="2" Data="M 64 210 C 172 164, 254 270, 390 214" />
+                    <Path Stroke="#D8E0E8" StrokeThickness="1" Data="M 300 8 C 248 96, 338 176, 310 318" />
+                    <Path Stroke="#BFC9D4" StrokeThickness="1" Data="M 80 360 C 168 292, 260 350, 408 288" />
+                    <Path Stroke="#E7ECF1" StrokeThickness="2" Data="M 16 94 L 190 236 L 122 430" />
+                </Canvas>
+            </Border>
+            <Border x:Name="FoldBottomLeft"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    BorderBrush="#DDE2E7"
+                    BorderThickness="0,1,1,0"
+                    Opacity="0.98"
+                    RenderTransformOrigin="1,0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                        <GradientStop Color="#FFFFFF" Offset="0" />
+                        <GradientStop Color="#EEF3F8" Offset="0.5" />
+                        <GradientStop Color="#F7FAFD" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                        <SkewTransform AngleX="0" AngleY="0" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <Canvas Opacity="0.42" IsHitTestVisible="False">
+                    <Path Stroke="#C8D2DC" StrokeThickness="1" Data="M 46 18 C 130 94, 226 52, 360 156" />
+                    <Path Stroke="#FFFFFF" StrokeThickness="2" Data="M 20 215 C 120 160, 248 268, 405 220" />
+                    <Path Stroke="#D8E0E8" StrokeThickness="1" Data="M 76 402 C 150 318, 290 355, 410 296" />
+                    <Path Stroke="#BFC9D4" StrokeThickness="1" Data="M 300 18 C 236 120, 330 210, 292 365" />
+                    <Path Stroke="#E7ECF1" StrokeThickness="2" Data="M 12 76 L 176 238 L 98 438" />
+                </Canvas>
+            </Border>
+            <Border x:Name="FoldBottomRight"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BorderBrush="#DDE2E7"
+                    BorderThickness="1,1,0,0"
+                    Opacity="0.98"
+                    RenderTransformOrigin="0,0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                        <GradientStop Color="#FBFCFE" Offset="0" />
+                        <GradientStop Color="#EEF3F8" Offset="0.47" />
+                        <GradientStop Color="#FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                        <SkewTransform AngleX="0" AngleY="0" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <Canvas Opacity="0.42" IsHitTestVisible="False">
+                    <Path Stroke="#C8D2DC" StrokeThickness="1" Data="M 38 28 C 144 96, 245 44, 404 144" />
+                    <Path Stroke="#E7ECF1" StrokeThickness="2" Data="M 24 188 C 128 142, 270 260, 418 198" />
+                    <Path Stroke="#FFFFFF" StrokeThickness="2" Data="M 296 18 C 244 112, 344 205, 306 344" />
+                    <Path Stroke="#BFC9D4" StrokeThickness="1" Data="M 74 370 C 164 304, 270 352, 404 286" />
+                    <Path Stroke="#D8E0E8" StrokeThickness="1" Data="M 18 88 L 188 246 L 122 438" />
+                </Canvas>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
