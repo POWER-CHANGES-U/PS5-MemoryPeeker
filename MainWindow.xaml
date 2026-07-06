@@ -239,7 +239,7 @@
                     <ColumnDefinition Width="58" />
                     <ColumnDefinition Width="126" />
                     <ColumnDefinition Width="104" />
-                    <ColumnDefinition Width="34" />
+                    <ColumnDefinition Width="30" />
                     <ColumnDefinition Width="132" />
                     <ColumnDefinition Width="1.2*" />
                     <ColumnDefinition Width="112" />
@@ -264,9 +264,19 @@
                            Visibility="Collapsed" />
                 <TextBox x:Name="IpBox" Text="" Grid.Row="1" Grid.Column="1" TabIndex="0" Margin="0,0,10,0" ToolTip="PS5 IP address" />
                 <Button x:Name="ConnectButton" Content="Connect" Grid.Row="1" Grid.Column="2" Style="{StaticResource PrimaryButton}" Margin="0,0,4,0" Click="Connect_Click" />
-                <Button x:Name="HistoryButton" Grid.Row="1" Grid.Column="3" Padding="0" Margin="0,0,8,0" ToolTip="Connection history" Click="HistoryButton_Click">
-                    <Grid Width="18" Height="18">
-                        <Path Data="M 3 6 L 9 12 L 15 6 Z"
+                <Button x:Name="HistoryButton"
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Width="26"
+                        MinWidth="26"
+                        Padding="0"
+                        Margin="0,0,4,0"
+                        HorizontalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        ToolTip="Connection history"
+                        Click="HistoryButton_Click">
+                    <Grid Width="14" Height="14">
+                        <Path Data="M 3 5 L 7 9 L 11 5 Z"
                               Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center" />
