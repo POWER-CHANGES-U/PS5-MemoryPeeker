@@ -41,7 +41,7 @@ public sealed class ProcessItem
     public string GameTitle { get; set; } = "";
     public bool IsGameProcess { get; init; }
     public int Rank { get; init; }
-    public string Display => "EBOOT Hooked";
+    public string Display => "EBOOT HOOKED ✅";
 }
 
 public sealed class MemorySection

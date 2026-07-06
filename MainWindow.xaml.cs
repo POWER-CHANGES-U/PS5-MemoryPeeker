@@ -287,7 +287,7 @@ public partial class MainWindow : Window
                 await _client.ConnectAsync(host, token);
                 bool processListAnswered = await RefreshProcessesAsync(token);
                 SetConnectionState(processListAnswered ? "Connected" : "Idle");
-                SetDiagnostics($"Payload: ready | {LibdebugPort}: connected | EBOOT: {(processListAnswered ? "found" : "waiting")}", processListAnswered);
+                SetDiagnostics($"Payload: ready | {LibdebugPort}: connected | EBOOT: {(processListAnswered ? "✅" : "❌")}", processListAnswered);
                 SaveConnectionHistory(host, PortBox.Text.Trim());
             }
             catch
@@ -797,8 +797,8 @@ public partial class MainWindow : Window
             _selectedProcess = _state.Processes[0];
             SetEbootDisplay(true);
             StartMemoryMapPrefetch(_selectedProcess);
-            SetDiagnostics($"Payload: ready | {LibdebugPort}: connected | EBOOT: found", true);
-            SetStatus("EBOOT hooked automatically. Click Refresh to load process memory.", true);
+            SetDiagnostics($"Payload: ready | {LibdebugPort}: connected | EBOOT: ✅", true);
+            SetStatus("EBOOT HOOKED ✅ automatically. Click Refresh to load process memory.", true);
         }
         catch
         {
@@ -875,13 +875,13 @@ public partial class MainWindow : Window
             _selectedProcess = _state.Processes[0];
             SetEbootDisplay(true);
             StartMemoryMapPrefetch(_selectedProcess);
-            SetStatus("Connected. EBOOT hooked; click Refresh to load process memory.", true);
+            SetStatus("Connected. EBOOT HOOKED ✅; click Refresh to load process memory.", true);
             return true;
         }
 
         _selectedProcess = null;
         SetEbootDisplay(false);
-        SetStatus("Connected to PS5Debug, but no EBOOT process was found. Start a game, then connect/refresh again.");
+        SetStatus("Connected to PS5Debug. EBOOT WAITING ❌. Start a game, then connect/refresh again.");
         return true;
     }
 
@@ -1283,7 +1283,7 @@ public partial class MainWindow : Window
         {
             if (await IsTcpPortOpenAsync(host, LibdebugPort, TimeSpan.FromSeconds(1), token))
             {
-                SetDiagnostics($"Payload: ready | {LibdebugPort}: open | EBOOT: probing", true);
+            SetDiagnostics($"Payload: ready | {LibdebugPort}: open | EBOOT: ❌", true);
                 SetStatus("PS5Debug port is open. Connecting...", true);
                 return;
             }
@@ -1801,7 +1801,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        ProcessDisplayBox.Text = hooked ? "EBOOT Hooked ✅" : "EBOOT - WAITING ❌";
+        ProcessDisplayBox.Text = hooked ? "EBOOT HOOKED ✅" : "EBOOT WAITING ❌";
     }
 
     private void UpdateThemeToggle()
@@ -1843,7 +1843,7 @@ public partial class MainWindow : Window
 
     private string BuildSectionStatus()
     {
-        return $"EBOOT Hooked: {_state.Sections.Count:N0} sections loaded, {_state.Sections.Count(s => s.IsSelected):N0} selected.";
+        return $"EBOOT HOOKED ✅: {_state.Sections.Count:N0} sections loaded, {_state.Sections.Count(s => s.IsSelected):N0} selected.";
     }
 
     private void UpdateSectionTotals(bool updateStatus = false)
