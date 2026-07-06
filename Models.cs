@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace PS5MemoryPeeker;
 
@@ -41,6 +42,7 @@ public sealed class ProcessItem
     public string GameTitle { get; set; } = "";
     public bool IsGameProcess { get; init; }
     public int Rank { get; init; }
+    [JsonIgnore]
     public string Display => "EBOOT HOOKED ✅";
 }
 
@@ -56,6 +58,7 @@ public sealed class MemorySection
     public uint Protection { get; init; }
     public ulong ByteLength => End > Start ? End - Start : 0;
     public int Length => checked((int)Math.Min((ulong)int.MaxValue, ByteLength));
+    [JsonIgnore]
     public string DisplayName => $"{Name}[{Index}]-{Protection:X}-{Start:X}-{ByteLength / 1024}KB";
 }
 
@@ -109,5 +112,6 @@ public sealed class ConnectionHistoryItem
 {
     public string Host { get; set; } = "";
     public string Port { get; set; } = "";
+    [JsonIgnore]
     public string Display => string.IsNullOrWhiteSpace(Port) ? Host : $"{Host}:{Port}";
 }
