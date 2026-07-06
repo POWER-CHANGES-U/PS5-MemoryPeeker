@@ -2,8 +2,6 @@
 
 PS5-MemoryPeeker is a lightweight Windows WPF tool for reading, scanning, and editing memory from the running PS5 `eboot.bin` process through PS5Debug/libdebug.
 
-It is built for offline game memory work on jailbroken PS5 setups: connect to PS5Debug, hook EBOOT, load memory sections, scan values, narrow results, and write values back.
-
 ## What It Does
 
 - Connects to PS5Debug/libdebug over the network.
@@ -20,9 +18,6 @@ It is built for offline game memory work on jailbroken PS5 setups: connect to PS
 - Windows 10/11
 - [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)
 - Jailbroken PS5 with PS5Debug support
-- PC and PS5 on the same network
-- PS5 IP address
-- Payload-loader port, if PS5Debug is not already running
 
 ## Included Runtime Files
 
