@@ -1515,6 +1515,9 @@ public partial class MainWindow : Window
         HeaderBorder.BorderBrush = line;
         ToolbarBorder.Background = surface;
         ToolbarBorder.BorderBrush = line;
+        ProcessDisplayBox.Background = control;
+        ProcessDisplayBox.BorderBrush = line;
+        ProcessDisplayText.Foreground = foreground;
         ThemePopupBorder.Background = control;
         ThemePopupBorder.BorderBrush = line;
         ApplyFoldPaperTheme();
@@ -1796,12 +1799,16 @@ public partial class MainWindow : Window
 
     private void SetEbootDisplay(bool hooked)
     {
-        if (ProcessDisplayBox is null)
+        if (ProcessDisplayBox is null ||
+            ProcessDisplayText is null ||
+            ProcessDisplayEmoji is null)
         {
             return;
         }
 
-        ProcessDisplayBox.Text = hooked ? "EBOOT HOOKED ✅" : "EBOOT WAITING ❌";
+        ProcessDisplayText.Text = hooked ? "EBOOT HOOKED" : "EBOOT WAITING";
+        ProcessDisplayEmoji.Text = hooked ? "✅" : "❌";
+        ProcessDisplayEmoji.Foreground = ThemeBrush(hooked ? "#00E676" : "#FF3B30");
     }
 
     private void UpdateThemeToggle()

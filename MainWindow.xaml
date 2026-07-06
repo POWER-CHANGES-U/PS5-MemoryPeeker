@@ -283,12 +283,29 @@
                                Foreground="{StaticResource MutedBrush}"
                                VerticalAlignment="Center" />
                 </StackPanel>
-                <TextBox x:Name="ProcessDisplayBox"
-                          Grid.Row="1"
-                          Grid.Column="5"
-                          Text="EBOOT WAITING ❌"
-                          IsReadOnly="True"
-                          Margin="0,0,8,0" />
+                <Border x:Name="ProcessDisplayBox"
+                        Grid.Row="1"
+                        Grid.Column="5"
+                        Background="#FFFFFF"
+                        BorderBrush="{StaticResource LineBrush}"
+                        BorderThickness="1"
+                        Margin="0,0,8,0"
+                        MinHeight="34">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="8,0">
+                        <TextBlock x:Name="ProcessDisplayText"
+                                   Text="EBOOT WAITING"
+                                   VerticalAlignment="Center" />
+                        <TextBlock x:Name="ProcessDisplayEmoji"
+                                   Text="❌"
+                                   FontFamily="Segoe UI Emoji"
+                                   Foreground="#FF3B30"
+                                   FontSize="15"
+                                   Margin="6,0,0,0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
                 <Button x:Name="RefreshMemoryButton" Content="Refresh" Grid.Row="1" Grid.Column="6" Margin="0,0,8,0" Click="RefreshMemory_Click" />
                 <TextBox x:Name="ValueBox" Grid.Row="1" Grid.Column="8" Text="" Margin="0,0,8,0" />
                 <ComboBox x:Name="ValueTypeBox" Grid.Row="1" Grid.Column="9" ItemsSource="{Binding Source={x:Static local:MemoryValueCodec.ValueTypes}}" SelectedIndex="2" Margin="0,0,8,0" />
