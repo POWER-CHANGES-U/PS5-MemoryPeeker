@@ -1893,7 +1893,7 @@ static int run_http_server(void)
         return -3;
     }
 
-    notify_ps5("memory backend started on port 1999");
+    notify_ps5("Made with ❤️ Payload loader, PS5MemoryPeeker is running on Port 1999");
 
     while (g_running) {
         int client = accept(server, 0, 0);
@@ -1910,6 +1910,6 @@ static int run_http_server(void)
 
 int main(void)
 {
-    notify_ps5("payload loaded");
+    notify_ps5("Made with ❤️ Payload loader, PS5MemoryPeeker is running on Port 1999");
     return run_http_server();
 }
